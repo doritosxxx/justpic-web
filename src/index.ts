@@ -32,43 +32,39 @@ document.addEventListener("DOMContentLoaded", async function(){
 	const light = new THREE.AmbientLight(0xffffff)
 	scene.add(light);
 
-	// Geometry.
-	const group = new THREE.Group()
 	
-	// Group.
+	const group = new THREE.Group()
 
 	const vertices = []
 	const colors = []
-	fractal.points.forEach((point, i) => {
-		/*
-		const sphere = new THREE.SphereGeometry(2, 12, 12)
-		const material = new THREE.MeshBasicMaterial( { 
-			color: point.color.toString(),
-		});
-		const mesh = new Mesh(sphere, material)
-		mesh.position.x = point.x - fractal.center.x
-		mesh.position.y = point.y - fractal.center.y
-		group.add(mesh)
-		*/
-
-		
-		vertices.push(point.x - fractal.center.x, point.y - fractal.center.y, i/60)
-		colors.push( point.color.r, point.color.g, point.color.b)
+	const depth = (fractal.width + fractal.height)/3
+	fractal.points.forEach((point, i) => {		
+		vertices.push(
+			point.x - fractal.center.x,
+			point.y - fractal.center.y,
+			depth/fractal.points.length*i - depth/2	
+		)
+		colors.push(
+			point.color.r/255, 
+			point.color.g/255, 
+			point.color.b/255
+		)
 		
 	})
-	console.log(colors)
+
+	// Geometry.
 	const geometry = new THREE.BufferGeometry();
 	geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) )
-	geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors , 3, true ) )
+	geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) )
 
 	const material = new THREE.PointsMaterial({
 		size: 10,
 		vertexColors: true
 	})
+
 	const points = new THREE.Points( geometry, material );
 	group.add(points)
 	scene.add(group)
-	group.position.x
 
 
 	const tick = () => {
