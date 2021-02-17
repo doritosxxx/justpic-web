@@ -113,7 +113,7 @@ class FractalComplexFunction extends Fractal {
 
 
 
-	async generate(): Promise<void>{
+	async generate(): Promise<void> {
 		
 		let maxLength = -1;
 		const points:Complex[] = []

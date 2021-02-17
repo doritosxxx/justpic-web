@@ -3,6 +3,7 @@
 		"module": "es2015",
 		"target": "es6",
 		"moduleResolution": "node",
+		"allowSyntheticDefaultImports": true
 	},
 	"include": ["src/**/*"],
   	"exclude": ["node_modules", "**/*.spec.ts"]
