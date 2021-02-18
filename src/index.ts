@@ -2,7 +2,8 @@ import * as THREE from 'three'
 const Vector3 = THREE.Vector3
 import { FractalComplexFunction } from './modules/Fractal'
 
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import setGUI from './gui'
+
  
 document.addEventListener("DOMContentLoaded", async function(){
 	const canvas:HTMLCanvasElement = document.querySelector("#canvas")
@@ -81,18 +82,13 @@ document.addEventListener("DOMContentLoaded", async function(){
 	}
 	scene.add(axis)
 
-	// Chikibamboni.
+	// Gui.
 
-	/*
-	const loader = new GLTFLoader()
-	loader.load('./assets/chikibamboni.gltf', function(gltf){
-		const sheep = gltf.scene
-		sheep.scale.set(15,15,15)
-		console.log(sheep)
-		scene.add(sheep)
-	})
-	*/
-
+	setGUI({
+		set,
+		scene,
+		axis
+	});
 
 	window.addEventListener("resize", function(){
 		const width = this.innerWidth
@@ -125,8 +121,8 @@ document.addEventListener("DOMContentLoaded", async function(){
 	const tick = () => {
 		requestAnimationFrame(tick)
 		renderer.render(scene, camera)
-		scene.rotation.x += 1/100
-		scene.rotation.y += 1/100
+		//scene.rotation.x += 1/100
+		//scene.rotation.y += 1/100
 
 	}
 	tick()

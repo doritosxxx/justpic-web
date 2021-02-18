@@ -26,7 +26,8 @@ module.exports = {
 	resolve: {
 		extensions: [".ts", ".js"],
 		alias:{
-			"complex.js$": path.resolve(__dirname, "node_modules/complex.js/complex.min.js")
+			"complex.js$": path.resolve(__dirname, "node_modules/complex.js/complex.min.js"),
+			"@jsm" : path.resolve(__dirname, "node_modules/three/examples/jsm")
 		}
 	},
 	devServer: {
