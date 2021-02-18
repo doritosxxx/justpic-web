@@ -14,7 +14,7 @@ function setGUI(data:{
 
 
 	const sceneFolder = gui.addFolder("Scene")
-	sceneFolder.add(scene.rotation, "x", 0, Math.PI * 2, 0.01).listen()
+	sceneFolder.add(scene.rotation, "x", -Math.PI/2,  Math.PI/2, 0.01).listen()
 	sceneFolder.add(scene.rotation, "y", 0, Math.PI * 2, 0.01).listen()
 	sceneFolder.add(scene.rotation, "z", 0, Math.PI * 2, 0.01).listen()
 	sceneFolder.open()

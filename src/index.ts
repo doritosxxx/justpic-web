@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 const Vector3 = THREE.Vector3
 import { FractalComplexFunction } from './modules/Fractal'
+import GroupController from './controller'
 
 import setGUI from './gui'
 
@@ -102,6 +103,8 @@ document.addEventListener("DOMContentLoaded", async function(){
 
 	// Controls.
 
+	// Warning. Scene may be not a Group instance.
+	const sceneController = new GroupController(scene as unknown as THREE.Group);
 	let isMoving = false
 
 	canvas.addEventListener("mousedown", () => isMoving = true )
@@ -110,10 +113,14 @@ document.addEventListener("DOMContentLoaded", async function(){
 		if(!isMoving) return;
 
 		// Limit the X axis (top-bottom) rotation beteen -pi/2 and pi/2 to fix incorrect Y axis rotation. 
-		const rotationx = scene.rotation.x + e.movementY/100
-		scene.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotationx))
+		let rotationx = scene.rotation.x + e.movementY/100
+		rotationx = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotationx))
 
-		scene.rotation.y += e.movementX/100
+		const rotationY = scene.rotation.y + e.movementX/100
+
+		sceneController.setX(rotationx)
+		sceneController.setY(rotationY)
+
 	})
 
 	
@@ -121,8 +128,9 @@ document.addEventListener("DOMContentLoaded", async function(){
 	const tick = () => {
 		requestAnimationFrame(tick)
 		renderer.render(scene, camera)
-		//scene.rotation.x += 1/100
-		//scene.rotation.y += 1/100
+
+		//sceneController.setY(scene.rotation.y +1/100)
+		//sceneController.setZ(scene.rotation.z +1/100)
 
 	}
 	tick()
