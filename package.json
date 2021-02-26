@@ -28,7 +28,7 @@
 	"scripts": {
 		"build": "webpack",
 		"serve": "webpack serve",
-		"surge-deploy": "npm build && surge ./build --domain justpic.surge.sh"
+		"surge-deploy": "surge ./build --domain justpic.surge.sh"
 	},
 	"keywords": [],
 	"author": "",

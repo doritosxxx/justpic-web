@@ -5,6 +5,15 @@ import GroupController from './controller'
 
 import setGUI from './gui'
 
+interface Point2D {
+	x:number
+	y:number
+}
+
+// Distance between 2 2D points.
+const distance = (p1:Point2D, p2:Point2D) => Math.sqrt((p1.x-p2.x)**2 + (p1.y-p2.y)**2)
+
+
  
 document.addEventListener("DOMContentLoaded", async function(){
 	const canvas:HTMLCanvasElement = document.querySelector("#canvas")
@@ -16,6 +25,7 @@ document.addEventListener("DOMContentLoaded", async function(){
 	canvas.height = height
 
 	const minSide = Math.min(width, height)
+	const pointSize = Math.ceil(minSide/70)
 
 	const fractal = new FractalComplexFunction(minSide, minSide, ...FractalComplexFunction.GetRandomParameters())
 	await fractal.generate()
@@ -63,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async function(){
 	geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) )
 
 	const material = new THREE.PointsMaterial({
-		size: 10,
+		size: pointSize,
 		vertexColors: true
 	})
 
@@ -106,23 +116,103 @@ document.addEventListener("DOMContentLoaded", async function(){
 	// Warning. Scene may be not a Group instance.
 	const sceneController = new GroupController(scene as unknown as THREE.Group);
 	let isMoving = false
+	let previousPoint: Point2D = {
+		x: 0,
+		y: 0
+	}
 
-	canvas.addEventListener("mousedown", () => isMoving = true )
-	canvas.addEventListener("mouseup", () => isMoving = false)
-	canvas.addEventListener("mousemove", e => {
+
+	function moveHandler(e :MouseEvent|TouchEvent){
 		if(!isMoving) return;
 
+		let movement: Point2D = {
+			x: 0,
+			y: 0,
+		}
+
+		// If user uses mouse.
+		if(e instanceof MouseEvent){
+			movement.x = e.clientX - previousPoint.x,
+			movement.y = e.clientY - previousPoint.y
+			previousPoint = {
+				x: e.clientX,
+				y: e.clientY,
+			}
+		}
+		// If user uses touchscreen.
+		else if(e instanceof TouchEvent){
+			let nearestPoint:Point2D = {
+				x: e.touches[0].clientX,
+				y: e.touches[0].clientY
+			}
+
+			for(let i=1; i<e.touches.length; i++){
+				const currentPoint:Point2D = {
+					x: e.touches[i].clientX,
+					y: e.touches[i].clientY
+				}
+				if(distance(previousPoint, currentPoint) < distance(previousPoint, nearestPoint))
+					nearestPoint = currentPoint;
+			}
+
+			// Delta.
+			movement = {
+				x: nearestPoint.x - previousPoint.x,
+				y: nearestPoint.y - previousPoint.y,
+			}
+			previousPoint = nearestPoint
+		}
+		else throw new Error("Incorrect event type");
+
 		// Limit the X axis (top-bottom) rotation beteen -pi/2 and pi/2 to fix incorrect Y axis rotation. 
-		let rotationx = scene.rotation.x + e.movementY/100
-		rotationx = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotationx))
+		const rotation:Point2D = {
+			x: scene.rotation.x + movement.y/100,
+			y: scene.rotation.y + movement.x/100
+		}
 
-		const rotationY = scene.rotation.y + e.movementX/100
+		rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotation.x))
 
-		sceneController.setX(rotationx)
-		sceneController.setY(rotationY)
+		sceneController.setX(rotation.x)
+		sceneController.setY(rotation.y)
 
-	})
+	}
 
+	function startMoveHandler(e :MouseEvent|TouchEvent){
+		isMoving = true
+		const point:Point2D = {
+			x:0,
+			y:0,
+		}
+
+		// If user uses mouse.
+		if(e instanceof MouseEvent){
+			point.x = e.clientX
+			point.y = e.clientY
+		}
+		// If user uses touchscreen.
+		else if(e instanceof TouchEvent){
+			point.x = e.touches[0].clientX
+			point.y = e.touches[0].clientY
+		}
+		else throw new Error("Incorrect event type");
+
+		previousPoint = point
+	}
+
+	function endMoveHandler(){
+		isMoving = false
+	}
+
+	// Mouse events.
+	canvas.addEventListener("mousedown", startMoveHandler )
+	canvas.addEventListener("mouseup", endMoveHandler)
+	canvas.addEventListener("mousemove", moveHandler)
+
+	// Touch events.
+	canvas.addEventListener("touchstart", startMoveHandler )
+	canvas.addEventListener("touchend", endMoveHandler )
+	canvas.addEventListener("touchcancel", endMoveHandler)
+	canvas.addEventListener("touchmove", moveHandler) 
 	
 
 	const tick = () => {
