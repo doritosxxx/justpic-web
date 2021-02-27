@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async function(){
 	renderer.setClearColor(0x000000)
 	const scene = new THREE.Scene()
 
-	const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000)
+	const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1500)
 	camera.position.set(0, 0, minSide)
 
 	// Light.
