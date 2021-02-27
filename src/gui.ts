@@ -5,9 +5,12 @@ function setGUI(data:{
 	camera: THREE.Camera
 	scene: THREE.Scene,
 	set: THREE.Group,
-	axis: THREE.Group
+	axis: THREE.Group,
+	settings : {
+		autoRotationEnabled: boolean,
+	}
 }):void{
-	const {scene, set, axis, camera} = data
+	const {scene, set, axis, camera, settings} = data
 
 	const gui = new GUI({
 		name: "justpic"
@@ -20,9 +23,12 @@ function setGUI(data:{
 	sceneFolder.add(camera.position, "z").min(300).max(900).name("camera").listen()
 	sceneFolder.open()
 
-	const axisFolder = gui.addFolder("Axis")
-	axisFolder.add(axis, "visible")
-	axisFolder.open()
+
+	const settingsFolder = gui.addFolder("Settings")
+	settingsFolder.add(axis, "visible").name("Show axis")
+	settingsFolder.add(settings, "autoRotationEnabled").name("Auto rotation")
+
+
 }
 
 export default setGUI;

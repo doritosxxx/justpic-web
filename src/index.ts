@@ -5,6 +5,10 @@ import { FractalComplexFunction } from './modules/Fractal'
 import setEvents from './events'
 import setGUI from './gui'
 
+const settings = {
+	autoRotationEnabled: false,
+}
+
 
 document.addEventListener("DOMContentLoaded", async function(){
 	const canvas:HTMLCanvasElement = document.querySelector("#canvas")
@@ -91,7 +95,8 @@ document.addEventListener("DOMContentLoaded", async function(){
 		camera,
 		set,
 		scene,
-		axis
+		axis,
+		settings
 	});
 
 
@@ -100,14 +105,14 @@ document.addEventListener("DOMContentLoaded", async function(){
 		scene,
 		camera,
 		renderer,
+		settings,
 	})
 
 	const tick = () => {
 		requestAnimationFrame(tick)
 		renderer.render(scene, camera)
 
-		//sceneController.setY(scene.rotation.y +1/100)
-		//sceneController.setZ(scene.rotation.z +1/100)
+		canvas.dispatchEvent(new CustomEvent("tick"))
 
 	}
 	tick()

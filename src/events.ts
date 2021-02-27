@@ -9,8 +9,11 @@ export default function setEvents(objects:{
 	scene: THREE.Scene,
 	renderer: THREE.WebGLRenderer,
 	camera: THREE.PerspectiveCamera,
+	settings: {
+		autoRotationEnabled: boolean,
+	}
 }){
-	const {scene, renderer, camera} = objects
+	const {scene, renderer, camera, settings} = objects
 	const canvas = renderer.domElement
 
 	// Warning. Scene may be not a Group instance.
@@ -43,8 +46,17 @@ export default function setEvents(objects:{
 	canvas.addEventListener("touchend", touchEndHandler )
 	canvas.addEventListener("touchcancel", touchEndHandler)
 	canvas.addEventListener("touchmove", touchMoveHandler) 
+
+	canvas.addEventListener("tick", tickHandler)
 	
 	// Events.	
+
+	function tickHandler(){
+		if(settings.autoRotationEnabled){
+			sceneController.setY(scene.rotation.y +1/100)
+			sceneController.setZ(scene.rotation.z +1/100)
+		}
+	}
 
 	function moveHandler(e :MouseEvent|TouchEvent){
 		if(!isMoving) return;
@@ -166,12 +178,15 @@ export default function setEvents(objects:{
 	}
 
 	function moveCameraHandler(e: WheelEvent|TouchEvent){
+		
+
 		let deltaY = 0;
 
 		if(e instanceof WheelEvent){
 			deltaY = e.deltaY*8
 		}
 		else if(e instanceof TouchEvent){
+			if(!isZooming)return;
 			// _ is always [].
 			const [p1, p2, ..._] = e.touches
 
