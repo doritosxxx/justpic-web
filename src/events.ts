@@ -21,6 +21,7 @@ export default function setEvents(objects:{
 		y: 0
 	}
 
+	
 	window.addEventListener("resize", function(){
 		const width = this.innerWidth
 		const height = this.innerHeight
@@ -35,16 +36,15 @@ export default function setEvents(objects:{
 	canvas.addEventListener("mousedown", startMoveHandler )
 	canvas.addEventListener("mouseup", endMoveHandler)
 	canvas.addEventListener("mousemove", moveHandler)
+	canvas.addEventListener("wheel", moveCameraHandler)
 
 	// Touch events.
-	canvas.addEventListener("touchstart", startMoveHandler )
-	canvas.addEventListener("touchend", endMoveHandler )
-	canvas.addEventListener("touchcancel", endMoveHandler)
-	canvas.addEventListener("touchmove", moveHandler) 
+	canvas.addEventListener("touchstart", touchStartHandler )
+	canvas.addEventListener("touchend", touchEndHandler )
+	canvas.addEventListener("touchcancel", touchEndHandler)
+	canvas.addEventListener("touchmove", touchMoveHandler) 
 	
-	// Events.
-
-	
+	// Events.	
 
 	function moveHandler(e :MouseEvent|TouchEvent){
 		if(!isMoving) return;
@@ -126,4 +126,66 @@ export default function setEvents(objects:{
 	function endMoveHandler(){
 		isMoving = false
 	}
+
+	function touchStartHandler(e:TouchEvent){
+		if(e.touches.length == 1)
+			startMoveHandler(e)
+		else if(e.touches.length == 2)
+			startMoveCameraHandler(e)
+	}
+
+	function touchEndHandler(e:TouchEvent){
+		if(e.touches.length == 1)
+			endMoveHandler()
+		else if(e.touches.length == 2)
+			endMoveCameraHandler()
+	}
+
+	function touchMoveHandler(e:TouchEvent){
+		if(e.touches.length == 1)
+			moveHandler(e)
+		else if(e.touches.length == 2)
+			moveCameraHandler(e)
+	}
+
+
+	let isZooming = false;
+	let previousZoomDistance = 0;
+
+	function startMoveCameraHandler(e: TouchEvent){
+		isZooming = true;
+
+		// _ is always [].
+		const [p1, p2, ..._] = e.touches
+
+		previousZoomDistance = Math.hypot(p1.clientX - p2.clientX, p1.pageY - p2.pageY)
+	}
+
+	function endMoveCameraHandler(){
+		isZooming = false;
+	}
+
+	function moveCameraHandler(e: WheelEvent|TouchEvent){
+		let deltaY = 0;
+
+		if(e instanceof WheelEvent){
+			deltaY = e.deltaY*8
+		}
+		else if(e instanceof TouchEvent){
+			// _ is always [].
+			const [p1, p2, ..._] = e.touches
+
+			const dist = Math.hypot(p1.clientX - p2.clientX, p1.pageY - p2.pageY);
+			deltaY = (previousZoomDistance - dist)
+			previousZoomDistance = dist
+
+		}
+		else throw new Error("Incorrect event type");
+
+
+		let position = Math.max(300, Math.min(camera.position.z + deltaY, 900 ))
+		camera.position.z = position;
+	}
+
+
 }
