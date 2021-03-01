@@ -7,6 +7,8 @@ import setGUI from './gui'
 
 const settings = {
 	autoRotationEnabled: false,
+	flatView: true,
+	cameraZ: 0 
 }
 
 
@@ -34,8 +36,9 @@ document.addEventListener("DOMContentLoaded", async function(){
 	renderer.setClearColor(0x000000)
 	const scene = new THREE.Scene()
 
-	const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1500)
-	camera.position.set(0, 0, minSide)
+	settings.cameraZ = minSide
+	const perspectiveCamera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1500)
+	const ortographicCamera = new THREE.OrthographicCamera(-width, width, height, -height, -1000, 1000 );
 
 	// Light.
 	const light = new THREE.AmbientLight(0xffffff)
@@ -65,7 +68,9 @@ document.addEventListener("DOMContentLoaded", async function(){
 	// Set geometry.
 	const geometry = new THREE.BufferGeometry();
 	geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) )
-	geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) )
+	const colorAttribute = new THREE.Float32BufferAttribute( colors, 3 )
+	colorAttribute.setUsage(THREE.DynamicDrawUsage)
+	geometry.setAttribute( 'color', colorAttribute )
 
 	const material = new THREE.PointsMaterial({
 		size: pointSize,
@@ -89,27 +94,33 @@ document.addEventListener("DOMContentLoaded", async function(){
 	axis.visible = false;
 	scene.add(axis)
 
-	// Gui.
-
-	setGUI({
-		camera,
+	// GUI.
+	const gui = setGUI({
+		camera: perspectiveCamera,
 		set,
 		scene,
 		axis,
 		settings
-	});
-
+	})
 
 	// Events.
 	setEvents({
 		scene,
-		camera,
+		camera: perspectiveCamera,
 		renderer,
 		settings,
+		gui,
 	})
 
 	const tick = () => {
 		requestAnimationFrame(tick)
+
+		const camera: THREE.Camera = settings.flatView ? ortographicCamera : perspectiveCamera
+		if(perspectiveCamera.position.z != settings.cameraZ){
+			perspectiveCamera.position.z = settings.cameraZ
+		}
+
+
 		renderer.render(scene, camera)
 
 		canvas.dispatchEvent(new CustomEvent("tick"))

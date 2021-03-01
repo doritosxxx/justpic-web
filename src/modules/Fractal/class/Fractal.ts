@@ -9,7 +9,8 @@ abstract class Fractal implements FractalData {
 	readonly height: number
 	readonly center: Point
 	
-	protected readonly palette: Color[]
+	protected color1: Color
+	protected color2: Color
 	readonly penSize: number
 	readonly points: ColoredPoint[] = []
 
@@ -27,7 +28,8 @@ abstract class Fractal implements FractalData {
 			throw new RangeError("iteration count must be not less than 0")
 
 		this.iterations = iterations
-		this.palette = Color.GetGradient(Color.GetRandom(), Color.GetRandom(), iterations)
+		this.color1 = Color.GetRandom()
+		this.color2 = Color.GetRandom()
 		this.width = width
 		this.height = height
 		this.penSize = Math.round((width + height)/2 /1000*4)
@@ -41,7 +43,7 @@ abstract class Fractal implements FractalData {
 	async saveTo(path: string){
 		//const buffer = this.canvas.toBuffer('image/png')
   		//await fs.writeFile(path, buffer)
-		console.log("not implemented")
+		console.error("not implemented")
 	}
 
 	get caption(): string{
@@ -51,7 +53,15 @@ abstract class Fractal implements FractalData {
 	}
 
 	private getColorsRange(){
-		return `colors: ${this.palette[0]} - ${this.palette[this.palette.length-1]}`
+		return `colors: ${this.color1} - ${this.color2}`
+	}
+
+	public setPointColors(from:Color, to:Color){
+		this.color1 = from
+		this.color2 = to
+		const palette = Color.GetGradient(from, to, this.points.length)
+		for(let i=0; i<this.points.length; i++)
+			this.points[i].color = palette[i]
 	}
 }
 

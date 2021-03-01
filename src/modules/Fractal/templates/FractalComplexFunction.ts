@@ -1,6 +1,6 @@
 import Fractal from '../class/Fractal'
 import Complex from 'complex.js'
-import { Size, ColoredPoint } from '../../Drawing'
+import { Size, ColoredPoint, Color } from '../../Drawing'
 
 import ComplexFunction from '../class/ComplexFunction'
 
@@ -111,8 +111,6 @@ class FractalComplexFunction extends Fractal {
 		add("step", prec(this.step))
 	}
 
-
-
 	async generate(): Promise<void> {
 		
 		let maxLength = -1;
@@ -129,11 +127,12 @@ class FractalComplexFunction extends Fractal {
 			this.height / maxLength / 2
 		)
 
+		const palette = Color.GetGradient(this.color1, this.color2, points.length)
 		points.forEach( (point, i) => {
 			const coloredScaledPoint = new ColoredPoint(
 				point.re * scaledSize.width + this.center.x,
 				point.im * scaledSize.height + this.center.y,
-				this.palette[i]
+				palette[i]
 			)
 			this.points.push(coloredScaledPoint);
 		})

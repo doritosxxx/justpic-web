@@ -1,4 +1,5 @@
 import GroupController from './controller'
+import { GUI } from '@jsm/libs/dat.gui.module.js'
 import * as THREE from 'three'
 
 import IPoint2D from './class/IPoint2D'
@@ -8,12 +9,15 @@ import {distance} from './functions'
 export default function setEvents(objects:{
 	scene: THREE.Scene,
 	renderer: THREE.WebGLRenderer,
-	camera: THREE.PerspectiveCamera,
+	camera: THREE.PerspectiveCamera|THREE.OrthographicCamera,
+	gui: GUI,
 	settings: {
 		autoRotationEnabled: boolean,
+		flatView: boolean,
+		cameraZ: number,
 	}
 }){
-	const {scene, renderer, camera, settings} = objects
+	const {scene, renderer, camera, settings, gui} = objects
 	const canvas = renderer.domElement
 
 	// Warning. Scene may be not a Group instance.
@@ -23,15 +27,27 @@ export default function setEvents(objects:{
 		x: 0,
 		y: 0
 	}
-
 	
 	window.addEventListener("resize", function(){
 		const width = this.innerWidth
 		const height = this.innerHeight
+		const minSide = Math.min(width, height)
 
-		camera.aspect = width/height
+		if( camera instanceof THREE.PerspectiveCamera){
+			camera.aspect = width/height
+		}
+		/*
+		else if(camera instanceof THREE.OrthographicCamera){
+			camera.left = -width
+			camera.right = width
+			camera.top = height
+			camera.bottom = -height
+			camera.view = {
+
+			}
+		}*/
 		camera.updateProjectionMatrix()
-
+		
 		renderer.setSize(width, height)
 	})
 
@@ -198,8 +214,13 @@ export default function setEvents(objects:{
 		else throw new Error("Incorrect event type");
 
 
-		let position = Math.max(300, Math.min(camera.position.z + deltaY, 900 ))
-		camera.position.z = position;
+		let position = Math.max(300, Math.min(settings.cameraZ + deltaY, 900 ))
+
+		// Camera settings controller.
+		console.log("object")
+		gui.__folders.Scene.__controllers[3].setValue(position)
+		settings.cameraZ = gui.__folders.Scene.__controllers[3].getValue()
+		
 	}
 
 
