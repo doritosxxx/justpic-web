@@ -7,7 +7,7 @@ import setGUI from './gui'
 
 const settings = {
 	autoRotationEnabled: false,
-	flatView: true,
+	flatView: false,
 	cameraZ: 0 
 }
 
