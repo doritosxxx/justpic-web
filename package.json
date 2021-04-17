@@ -1,15 +1,14 @@
 {
 	"name": "justpic-web",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "",
 	"main": "index.js",
 	"dependencies": {
-		"complex.js": "^2.0.11",
-		"three": "^0.125.2"
+		"three": "^0.125.2",
+		"xenium": "^1.0.8"
 	},
 	"devDependencies": {
 		"@types/dat.gui": "^0.7.6",
-		"@types/complex.js": "^2.0.1",
 		"@types/node": "^14.14.25",
 		"@types/three": "^0.125.0",
 		"@types/webpack": "^4.41.26",

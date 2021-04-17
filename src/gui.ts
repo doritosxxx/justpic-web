@@ -2,7 +2,6 @@ import { GUI } from '@jsm/libs/dat.gui.module.js'
 import * as THREE from 'three'
 import { BufferGeometry } from 'three'
 
-import Color from './modules/Drawing/Color'
 
 function setGUI(data:{
 	camera: THREE.Camera
@@ -28,16 +27,6 @@ function setGUI(data:{
 	sceneFolder.add(settings, "cameraZ").min(300).max(900).name("camera").listen()
 	sceneFolder.open()
 
-	/*
-	const fractalFolder = gui.addFolder("Fractal")
-	fractalFolder.addColor(colors, "color1").name("Color 1").onChange(e => {
-
-	})
-	fractalFolder.addColor(colors, "color2").name("Color 2").onChange(e=>{
-		
-	})
-	fractalFolder.open()
-*/
 
 	const settingsFolder = gui.addFolder("Settings")
 	settingsFolder.add(axis, "visible").name("Show axis")
