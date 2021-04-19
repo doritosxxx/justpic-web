@@ -1,10 +1,15 @@
 import * as THREE from 'three'
 const Vector3 = THREE.Vector3
 
-import * as gui from './gui'
+import { renderGUI } from './gui'
+
+import {grabQueryParameters, updateQueryParameter} from './url'
+grabQueryParameters()
+
 
 document.addEventListener("DOMContentLoaded", async function(){
-	gui.render()
+	const gui = renderGUI()
+	
 
 	const canvas:HTMLCanvasElement = document.querySelector("#canvas") as HTMLCanvasElement
 
@@ -45,14 +50,14 @@ document.addEventListener("DOMContentLoaded", async function(){
 	axis.visible = true;
 	scene.add(axis)
 
-
+	
 
 	const tick = () => {
 		requestAnimationFrame(tick)
 
 		renderer.render(scene, camera)
 
-		canvas.dispatchEvent(new CustomEvent("tick"))
+	
 
 	}
 	tick()
