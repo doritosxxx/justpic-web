@@ -4,7 +4,7 @@ const Vector3 = THREE.Vector3
 import { renderGUI } from './gui'
 import { setEventHandlers } from './events'
 
-import { grabQueryParameters, updateQueryParameter } from './url'
+import { grabQueryParameters } from './url'
 grabQueryParameters()
 
 

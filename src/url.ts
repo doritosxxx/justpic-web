@@ -9,7 +9,7 @@ type UrlQueryKey = "c1" | "c2" | "it" | "z" | "t"
 
 type QueryPair = [UrlQueryKey, number]
 
-interface ISearchEntries{
+interface ISearchEntries {
 	c1: number,
 	c2: number,
 	it: number,
@@ -38,7 +38,7 @@ class QueryParameters implements ISearchEntries{
 
 }
 
-const queryParameters: ISearchEntries = new QueryParameters()
+const fractalParameters: ISearchEntries = new QueryParameters()
 
 function valid(key: UrlQueryKey, value: number): boolean{
 	switch(key){
@@ -78,14 +78,14 @@ function grabQueryParameters(){
 		.map(entry => entry.split("="))
 		.filter(entry => entry.length > 0 && isQueryKey(entry[0]))
 		.map(pair => [pair[0], pair.length == 1 ? 0 : +pair[1]] as QueryPair)
-		.forEach((pair:QueryPair) => queryParameters[pair[0]] = pair[1] )
+		.forEach((pair:QueryPair) => fractalParameters[pair[0]] = pair[1] )
 
 	setQueryParameters()
 	
 }
 
 function setQueryParameters(){
-	const newurl = location.origin + "?" + Object.entries(queryParameters).map(pair => pair[0]+"="+pair[1]).join("&")
+	const newurl = location.origin + "?" + Object.entries(fractalParameters).map(pair => pair[0]+"="+pair[1]).join("&")
 	window.history.pushState({url:newurl},'', newurl)
 }
 
@@ -94,11 +94,12 @@ function updateQueryParameter(key: UrlQueryKey, value: number){
 	if(!valid(key, value))
 		return;
 
-	queryParameters[key] = value;
+	fractalParameters[key] = value;
 	setQueryParameters()
 }
 
 export {
+	fractalParameters,
 	grabQueryParameters,
 	updateQueryParameter
 }
