@@ -48,15 +48,13 @@ document.addEventListener("DOMContentLoaded", async function(){
 	
 	scene.add(axis)
 
-	const gui = renderGUI(scene, axis, camera)
+	renderGUI(scene, axis, camera)
 	setEventHandlers(scene, renderer, camera)
 
 
 	const tick = () => {
 		requestAnimationFrame(tick)
-
 		renderer.render(scene, camera)
-
 	}
 	tick()
 })
