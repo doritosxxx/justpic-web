@@ -1,5 +1,6 @@
 import state from './state'
 import dat from '@jsm/libs/dat.gui.module.js'
+import type {Scene, Group, Camera} from 'three'
 
 import { patterns } from 'xenium'
 const FractalComplexFunction = patterns.FractalComplexFunctionChaos
@@ -8,7 +9,11 @@ import { updateQueryParameter } from './url'
 
 const PI2 = Math.PI * 2
 
-function renderGUI(){	
+function renderGUI(
+	scene: Scene,
+	axis: Group,
+	camera: Camera
+){	
 	const gui = new dat.GUI()
 	
 	{
@@ -18,11 +23,13 @@ function renderGUI(){
 			.onFinishChange(color => {
 				updateQueryParameter("c1", color)
 			})
+
 		folder.addColor(state.fractalSettings, "color2")
 			.name("Color 2")
 			.onFinishChange(color => {
 				updateQueryParameter("c2", color)
 			})
+
 		folder.add(state.fractalSettings, "iterations")
 			.min(FractalComplexFunction.iterationRange[0])
 			.max(FractalComplexFunction.iterationRange[1])
@@ -31,6 +38,7 @@ function renderGUI(){
 			.onFinishChange(iterations => {
 				updateQueryParameter("it", iterations)
 			})
+
 		folder.add(state.fractalSettings, "z")
 			.min(FractalComplexFunction.zRange[0])
 			.max(FractalComplexFunction.zRange[1])
@@ -38,21 +46,22 @@ function renderGUI(){
 			.onFinishChange(z => {
 				updateQueryParameter("z", z)
 			})
+			
 		folder.open()
 	}
 
 	{
 		const folder = gui.addFolder("Scene")
-		folder.add(state.scene, "x").min(-PI2).max(PI2).step(0.01).listen()
-		folder.add(state.scene, "y").min(0).max(PI2).step(0.01).listen()
-		folder.add(state.scene, "z").min(0).max(PI2).step(0.01).listen()
-		folder.add(state.scene, "camera").min(300).max(900).listen()
+		folder.add(scene.rotation, "x").min(-Math.PI/2).max(Math.PI/2).step(0.01).listen()
+		folder.add(scene.rotation, "y").min(0).max(PI2).step(0.01).listen()
+		folder.add(scene.rotation, "z").min(0).max(PI2).step(0.01).listen()
+		folder.add(camera.position, "z").min(300).max(900).name("camera").listen()
 		folder.open()
 	}
 
 	{
 		const folder = gui.addFolder("Settings")
-		folder.add(state.settings, "showAxis").name("Show axis")
+		folder.add(axis, "visible").name("Show axis")
 		folder.open()
 	}
 

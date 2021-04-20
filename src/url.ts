@@ -1,8 +1,8 @@
-import {patterns} from 'xenium'
+import { patterns } from 'xenium'
 const FractalComplexFunction = patterns.FractalComplexFunctionChaos
 
 // TODO: relocate this import to the library.
-import {randomInRange} from 'xenium/lib/functions'
+import { randomInRange } from 'xenium/lib/functions'
 
 // color1 | color2 | iterations | z | type
 type UrlQueryKey = "c1" | "c2" | "it" | "z" | "t"
@@ -99,6 +99,6 @@ function updateQueryParameter(key: UrlQueryKey, value: number){
 }
 
 export {
-	grabQueryParameters, 
+	grabQueryParameters,
 	updateQueryParameter
-};
+}

@@ -2,14 +2,13 @@ import * as THREE from 'three'
 const Vector3 = THREE.Vector3
 
 import { renderGUI } from './gui'
+import { setEventHandlers } from './events'
 
-import {grabQueryParameters, updateQueryParameter} from './url'
+import { grabQueryParameters, updateQueryParameter } from './url'
 grabQueryParameters()
 
 
-document.addEventListener("DOMContentLoaded", async function(){
-	const gui = renderGUI()
-	
+document.addEventListener("DOMContentLoaded", async function(){	
 
 	const canvas:HTMLCanvasElement = document.querySelector("#canvas") as HTMLCanvasElement
 
@@ -28,15 +27,14 @@ document.addEventListener("DOMContentLoaded", async function(){
 
 	// Black background.
 	renderer.setClearColor(0x000000)
+	
 	const scene = new THREE.Scene()
-
 	const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1500)
+	camera.position.z = 750
 
 	// Light.
 	const light = new THREE.AmbientLight(0xffffff)
-	scene.add(light);
-
-
+	scene.add(light)
 
 	// Axis.
 	const axis = new THREE.Group()
@@ -47,17 +45,17 @@ document.addEventListener("DOMContentLoaded", async function(){
 		const line = new THREE.Line(geometry, material)
 		axis.add(line)
 	}
-	axis.visible = true;
+	
 	scene.add(axis)
 
-	
+	const gui = renderGUI(scene, axis, camera)
+	setEventHandlers(scene, renderer, camera)
+
 
 	const tick = () => {
 		requestAnimationFrame(tick)
 
 		renderer.render(scene, camera)
-
-	
 
 	}
 	tick()
