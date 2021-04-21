@@ -1,14 +1,29 @@
 {
 	"compilerOptions": {
-		"module": "es2015",
-		"target": "es6",
+
+		"target": "es5" ,
+		"module": "commonjs" ,
+		"outDir": "./build",
+	
+		"strict": true, 
+	
 		"moduleResolution": "node",
-		"allowSyntheticDefaultImports": true,
+
 		"paths": {
 			"@jsm/*": ["./node_modules/three/examples/jsm/*"],
-			"@jsm/libs/dat.gui.module.js": ["./node_modules/@types/dat.gui"]
-		}
+			"@jsm/libs/dat.gui.module.js": ["./node_modules/@types/dat.gui"],
+		},
+
+		// "allowSyntheticDefaultImports": true,      
+		"esModuleInterop": true, 
+
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
 	},
-	"include": ["src/**/*"],
-  	"exclude": ["node_modules", "**/*.spec.ts"]
+
+	"include": ["src"],
+	"exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
 }
