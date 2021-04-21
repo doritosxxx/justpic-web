@@ -115,7 +115,7 @@ function setEventHandlers(
 		let deltaY = 0;
 
 		if(e instanceof WheelEvent){
-			deltaY = (e.deltaY)*8
+			deltaY = (e.deltaY)/6
 		}
 		else if(e instanceof TouchEvent){
 			if(!isZooming)return;

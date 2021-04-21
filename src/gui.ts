@@ -12,7 +12,8 @@ const PI2 = Math.PI * 2
 function renderGUI(
 	scene: Scene,
 	axis: Group,
-	camera: Camera
+	camera: Camera,
+	rerender: ()=>void
 ){	
 	const gui = new dat.GUI()
 	
@@ -20,14 +21,16 @@ function renderGUI(
 		const folder = gui.addFolder("Fractal settings")
 		folder.addColor(fractalParameters, "c1")
 			.name("Color 1")
-			.onFinishChange(color => {
+			.onChange(color => {
 				updateQueryParameter("c1", color)
+				rerender()
 			})
 
 		folder.addColor(fractalParameters, "c2")
 			.name("Color 2")
-			.onFinishChange(color => {
+			.onChange(color => {
 				updateQueryParameter("c2", color)
+				rerender()
 			})
 
 		folder.add(fractalParameters, "it")
@@ -35,16 +38,18 @@ function renderGUI(
 			.max(FractalComplexFunction.iterationRange[1])
 			.step(1)
 			.name("Iterations")
-			.onFinishChange(iterations => {
+			.onChange(iterations => {
 				updateQueryParameter("it", iterations)
+				rerender()
 			})
 
 		folder.add(fractalParameters, "z")
 			.min(FractalComplexFunction.zRange[0])
 			.max(FractalComplexFunction.zRange[1])
 			.step(1)
-			.onFinishChange(z => {
+			.onChange(z => {
 				updateQueryParameter("z", z)
+				rerender()
 			})
 			
 		folder.open()
