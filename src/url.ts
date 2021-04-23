@@ -95,11 +95,11 @@ function updateQueryParameter(key: UrlQueryKey, value: number){
 		return;
 
 	fractalParameters[key] = value;
-	setQueryParameters()
 }
 
 export {
 	fractalParameters,
 	grabQueryParameters,
-	updateQueryParameter
+	updateQueryParameter,
+	setQueryParameters,
 }

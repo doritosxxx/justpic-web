@@ -13,7 +13,7 @@ function renderGUI(
 	scene: Scene,
 	axis: Group,
 	camera: Camera,
-	rerender: ()=>void
+	tryRerender: () => void,
 ){	
 	const gui = new dat.GUI()
 	
@@ -23,14 +23,14 @@ function renderGUI(
 			.name("Color 1")
 			.onChange(color => {
 				updateQueryParameter("c1", color)
-				rerender()
+				tryRerender()
 			})
 
 		folder.addColor(fractalParameters, "c2")
 			.name("Color 2")
 			.onChange(color => {
 				updateQueryParameter("c2", color)
-				rerender()
+				tryRerender()
 			})
 
 		folder.add(fractalParameters, "it")
@@ -40,7 +40,7 @@ function renderGUI(
 			.name("Iterations")
 			.onChange(iterations => {
 				updateQueryParameter("it", iterations)
-				rerender()
+				tryRerender()
 			})
 
 		folder.add(fractalParameters, "z")
@@ -49,7 +49,7 @@ function renderGUI(
 			.step(1)
 			.onChange(z => {
 				updateQueryParameter("z", z)
-				rerender()
+				tryRerender()
 			})
 			
 		folder.open()
