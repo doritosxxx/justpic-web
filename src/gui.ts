@@ -1,8 +1,7 @@
 import dat from '@jsm/libs/dat.gui.module.js'
 import type {Scene, Group, Camera} from 'three'
 
-import { patterns } from 'xenium'
-const FractalComplexFunction = patterns.FractalComplexFunctionChaos
+import { FractalComplexFunctionChaos as FractalComplexFunction } from 'xenium'
 
 import { updateQueryParameter, fractalParameters } from './url'
 

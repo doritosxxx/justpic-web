@@ -1,30 +1,23 @@
 import * as THREE from 'three'
-import { Caption, graphicElements, proxies } from 'xenium'
+
 import Color from 'xenium/lib/Drawing/Color'
 import {
-	FractalComplexFunctionChaos,
-	FractalComplexFunctionHole,
-	FractalComplexFunctionKnot,
-	FractalComplexFunctionSphere,
-	FractalComplexFunctionWhirl
-} from 'xenium/lib/Fractal/patterns'
+	complexFractalTypeList,
+	Caption, StorageProxy, GraphicPoint
+} from 'xenium'
 import { fractalParameters } from './url'
 
 
 const { Vector2 } = THREE
 
+
 function generateFractal(): THREE.Group{
-	const types = [
-		FractalComplexFunctionChaos,
-		FractalComplexFunctionHole,
-		FractalComplexFunctionKnot,
-		FractalComplexFunctionSphere,
-		FractalComplexFunctionWhirl
-	]
 
 	const side = Math.min(window.innerWidth, window.innerHeight)
 	const pointSize = Math.ceil(side/70)
-	const fractal = new (types[fractalParameters.t])(
+
+	const fractalType = complexFractalTypeList[~~(Math.random()*complexFractalTypeList.length)]
+	const fractal = new fractalType(
 		side, side, 
 		fractalParameters.it,
 		fractalParameters.z,
@@ -34,10 +27,8 @@ function generateFractal(): THREE.Group{
 
 	const caption = new Caption()
 	// Ломаем всю идею библиотеки. 
-	const proxy = new proxies.StorageProxy()
+	const proxy = new StorageProxy()
 	fractal.generate(proxy, caption)
-
-	//console.log(caption.toString())
 
 	// Render.
 	const set = new THREE.Group()
@@ -48,8 +39,8 @@ function generateFractal(): THREE.Group{
 	const center = new Vector2(fractal.width/2, fractal.height/2)
 
 	proxy.graphics
-		.filter(graphic => graphic instanceof graphicElements.GraphicPoint)
-		.map(e => e as graphicElements.GraphicPoint)
+		.filter(graphic => graphic instanceof GraphicPoint)
+		.map(e => e as GraphicPoint)
 		.forEach((point, i) => {		
 		vertices.push(
 			point.x - center.x,
@@ -63,7 +54,6 @@ function generateFractal(): THREE.Group{
 	const geometry = new THREE.BufferGeometry();
 	geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) )
 	const colorAttribute = new THREE.Float32BufferAttribute( colors, 3 )
-	//colorAttribute.setUsage(THREE.DynamicDrawUsage)
 	geometry.setAttribute( 'color', colorAttribute )
 
 	const material = new THREE.PointsMaterial({

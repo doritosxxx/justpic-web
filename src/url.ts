@@ -1,5 +1,4 @@
-import { patterns } from 'xenium'
-const FractalComplexFunction = patterns.FractalComplexFunctionChaos
+import { FractalComplexFunctionChaos as FractalComplexFunction } from 'xenium'
 
 // TODO: relocate this import to the library.
 import { randomInRange } from 'xenium/lib/functions'

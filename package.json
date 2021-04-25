@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"dependencies": {
 		"three": "^0.125.2",
-		"xenium": "^1.0.12"
+		"xenium": "^1.2.1"
 	},
 	"devDependencies": {
 		"@types/dat.gui": "^0.7.6",
