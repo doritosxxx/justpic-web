@@ -1,4 +1,7 @@
-import { FractalComplexFunctionChaos as FractalComplexFunction } from 'xenium'
+import { 
+	FractalComplexFunctionChaos as FractalComplexFunction,
+	complexFractalTypeList
+ } from 'xenium'
 
 // TODO: relocate this import to the library.
 import { randomInRange } from 'xenium/lib/functions'
@@ -50,7 +53,7 @@ function valid(key: UrlQueryKey, value: number): boolean{
 			return FractalComplexFunction.zRange[0] <= value && value <= FractalComplexFunction.zRange[1];
 		case "t":
 			// Amount of Complex fractals.
-			return  0 <= value && value < 5;
+			return  0 <= value && value < complexFractalTypeList.length;
 	}
 }
 
@@ -64,7 +67,7 @@ function defaultValue(key: UrlQueryKey): number{
 		case "z":
 			return randomInRange(FractalComplexFunction.zRange[0], FractalComplexFunction.zRange[1]);
 		case "t":
-			return randomInRange(0,4);
+			return randomInRange(0, complexFractalTypeList.length - 1);
 	}
 }
 
