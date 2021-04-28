@@ -11,25 +11,28 @@ function addRadio(this: dat.GUI, name:string, target:BooleanObject, onChange: (p
 	let activeController: dat.GUIController|null =  null;
 
 	for(let property of Object.keys(target)){
-		const controller = folder.add(target, property).onChange( function(this: dat.GUIController, value: boolean){
-			if(activeController === null)
-				return;
+		const controller = folder
+			.add(target, property)
+			.name(property.replace("FractalComplexFunction", ""))
+			.onChange( function(this: dat.GUIController, value: boolean){
+				if(activeController === null)
+					return;
 
-			if(activeController == this){
+				if(activeController == this){
+					if(value === false)
+						this.setValue(true)
+					return;
+				}
 				if(value === false)
-					this.setValue(true)
-				return;
-			}
-			if(value === false)
-				return;
+					return;
 
-			const activeControllerCopy = activeController
-			activeController = this
-			activeControllerCopy.setValue(false)
+				const activeControllerCopy = activeController
+				activeController = this
+				activeControllerCopy.setValue(false)
 
-			onChange(property)
-			
-		})
+				onChange(property)
+				
+			})
 		
 		if(target[property] === true)
 			if(activeController === null)

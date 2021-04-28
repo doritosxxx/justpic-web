@@ -16,7 +16,7 @@ function generateFractal(): THREE.Group{
 	const side = Math.min(window.innerWidth, window.innerHeight)
 	const pointSize = Math.ceil(side/70)
 
-	const fractalType = complexFractalTypeList[~~(Math.random()*complexFractalTypeList.length)]
+	const fractalType = complexFractalTypeList[fractalParameters.t]
 	const fractal = new fractalType(
 		side, side, 
 		fractalParameters.it,

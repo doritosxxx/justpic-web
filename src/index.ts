@@ -10,13 +10,13 @@ import { grabQueryParameters, setQueryParameters } from './url'
 grabQueryParameters()
 
 
-
 let renderTimeout: null|number = null;
 let fractalSet: THREE.Group;
 
 function tryRenderFractal(scene: Scene){
 	if(renderTimeout !== null)
 		return;
+
 	renderTimeout = setTimeout(function(){
 		const newSet = generateFractal()
 		scene.remove(fractalSet)

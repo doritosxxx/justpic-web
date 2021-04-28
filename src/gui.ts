@@ -1,12 +1,20 @@
 import dat from '@jsm/libs/dat.gui.module.js'
 import type {Scene, Group, Camera} from 'three'
 
-import { FractalComplexFunctionChaos as FractalComplexFunction } from 'xenium'
+import { complexFractalTypeList, FractalComplexFunctionChaos as FractalComplexFunction } from 'xenium'
 
 import { updateQueryParameter, fractalParameters } from './url'
+import addRadio from './dat-radio'
 
+
+const fractalNames: Record<string, boolean> = {}
+for(let type of complexFractalTypeList)
+	fractalNames[type.name] = false
+
+fractalNames[complexFractalTypeList[fractalParameters.t].name] = true;
 
 const PI2 = Math.PI * 2
+
 
 function renderGUI(
 	scene: Scene,
@@ -18,6 +26,12 @@ function renderGUI(
 	
 	{
 		const folder = gui.addFolder("Fractal settings")
+
+		addRadio.call(folder, "Type", fractalNames, (type: string) => {
+			updateQueryParameter("t", complexFractalTypeList.findIndex(e=>e.name === type))
+			tryRerender()
+		}).open()
+
 		folder.addColor(fractalParameters, "c1")
 			.name("Color 1")
 			.onChange(color => {
