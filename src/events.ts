@@ -1,6 +1,8 @@
 import type { Scene, WebGLRenderer, PerspectiveCamera, } from 'three'
 import { Vector2,  } from 'three'
 
+import state from './state'
+
 let previousPoint = new Vector2(0,0)
 let isMouseMoving = false
 
@@ -131,8 +133,7 @@ function setEventHandlers(
 
 		}
 
-
-		camera.position.z = Math.max(300, Math.min(camera.position.z + deltaY, 900 ))
+		state.camera.positionZ = Math.max(300, Math.min(state.camera.positionZ + deltaY, 900 ))
 		
 	}
 

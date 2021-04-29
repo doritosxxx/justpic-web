@@ -6,6 +6,8 @@ import { complexFractalTypeList, FractalComplexFunctionChaos as FractalComplexFu
 import { updateQueryParameter, fractalParameters } from './url'
 import addRadio from './dat-radio'
 
+import state from './state'
+
 
 const fractalNames: Record<string, boolean> = {}
 for(let type of complexFractalTypeList)
@@ -19,7 +21,6 @@ const PI2 = Math.PI * 2
 function renderGUI(
 	scene: Scene,
 	axis: Group,
-	camera: Camera,
 	tryRerender: () => void,
 ){	
 	const gui = new dat.GUI()
@@ -73,7 +74,7 @@ function renderGUI(
 		folder.add(scene.rotation, "x").min(-Math.PI/2).max(Math.PI/2).step(0.01).listen()
 		folder.add(scene.rotation, "y").min(0).max(PI2).step(0.01).listen()
 		folder.add(scene.rotation, "z").min(0).max(PI2).step(0.01).listen()
-		folder.add(camera.position, "z").min(300).max(900).name("camera").listen()
+		folder.add(state.camera, "positionZ").min(300).max(900).name("camera").listen()
 		folder.open()
 	}
 
