@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 const { Vector3 } = THREE
-import { Camera, Scene } from 'three'
+import { Camera, Scene, CameraHelper } from 'three'
 
 import { renderGUI } from './gui'
 import { setEventHandlers } from './events'
@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", async function(){
 	canvas.height = height
 
 	const minSide = Math.min(width, height)
-	const pointSize = Math.ceil(minSide/70)
 
 	const renderer = new THREE.WebGLRenderer({
 		canvas: canvas
@@ -53,9 +52,8 @@ document.addEventListener("DOMContentLoaded", async function(){
 	const scene = new THREE.Scene()
 	const cameras = {
 		perspective: new THREE.PerspectiveCamera(75, width/height, 0.1, 1500),
-		orthographic: new THREE.OrthographicCamera(minSide, minSide, minSide, minSide, minSide, minSide),
+		orthographic: new THREE.OrthographicCamera(-width, width, height, -height, -minSide, minSide),
 	}
-	//camera.perspective.position.z = state.camera.positionZ
 
 	// Light.
 	const light = new THREE.AmbientLight(0xffffff)
@@ -76,12 +74,12 @@ document.addEventListener("DOMContentLoaded", async function(){
 	fractalSet = generateFractal()
 	scene.add(fractalSet)
 	renderGUI(scene, axis, ()=>tryRenderFractal(scene))
-	setEventHandlers(scene, renderer, cameras.perspective)
+	setEventHandlers(scene, renderer, cameras.perspective, cameras.orthographic)
 
 	const tick = () => {
 		requestAnimationFrame(tick)
+		cameras.perspective.position.z = state.camera.positionZ
 		const camera: Camera = state.camera.type === "perspective" ? cameras.perspective : cameras.orthographic
-		camera.position.z = state.camera.positionZ
 		renderer.render(scene, camera)
 	}
 	tick()

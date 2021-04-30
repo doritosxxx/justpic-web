@@ -14,7 +14,7 @@ const { Vector2 } = THREE
 function generateFractal(): THREE.Group{
 
 	const side = Math.min(window.innerWidth, window.innerHeight)
-	const pointSize = Math.ceil(side/70)
+	const pointSize = Math.ceil(side/80)
 
 	const fractalType = complexFractalTypeList[fractalParameters.t]
 	const fractal = new fractalType(

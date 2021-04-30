@@ -81,6 +81,9 @@ function renderGUI(
 	{
 		const folder = gui.addFolder("Settings")
 		folder.add(axis, "visible").name("Show axis")
+		folder.add({isFlat:false}, "isFlat").name("Flat view").onChange(isFlat=>{
+			state.camera.type = isFlat ? "orthographic" : "perspective"; 
+		})
 		folder.open()
 	}
 

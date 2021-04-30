@@ -1,5 +1,5 @@
-import type { Scene, WebGLRenderer, PerspectiveCamera, } from 'three'
-import { Vector2,  } from 'three'
+import type { Scene, WebGLRenderer, PerspectiveCamera, OrthographicCamera} from 'three'
+import { Vector2 } from 'three'
 
 import state from './state'
 
@@ -9,38 +9,41 @@ let isMouseMoving = false
 let isZooming = false
 let previousZoomDistance = 0
 
-function distance(p1:Vector2, p2:Vector2): number{
-	return Math.hypot(p1.x-p2.x, p1.y-p2.y);
-}
-
 // Main export function.
 function setEventHandlers(
 	scene: Scene,
 	renderer: WebGLRenderer,
-	camera: PerspectiveCamera
+	perspectiveCamera: PerspectiveCamera,
+	orthographicCamera: OrthographicCamera,
 ){
 	const canvas = renderer.domElement
 
 	window.addEventListener("resize", onWindowResize)
 
-	canvas.addEventListener("mousedown", onMoveStart )
+	canvas.addEventListener("mousedown", onMoveStart)
 	canvas.addEventListener("mouseup", onMoveEnd)
 	canvas.addEventListener("mousemove", onMove)
 	canvas.addEventListener("wheel", onZoom)
 
-	// TODO: Протестировать события на мобильных устройствах.
-	canvas.addEventListener("touchstart", onTouchStart )
-	canvas.addEventListener("touchend", onTouchEnd )
+	canvas.addEventListener("touchstart", onTouchStart)
+	canvas.addEventListener("touchend", onTouchEnd)
 	canvas.addEventListener("touchcancel", onTouchEnd)
 	canvas.addEventListener("touchmove", onTouchMove)
 
-	//#region handlers
+// #region handlers
 	function onWindowResize(){
 		const width = window.innerWidth
 		const height = window.innerHeight
 	
-		camera.aspect = width/height
-		camera.updateProjectionMatrix()
+		perspectiveCamera.aspect = width/height
+		perspectiveCamera.updateProjectionMatrix()
+
+		orthographicCamera.left = -width
+		orthographicCamera.right = width
+		orthographicCamera.top = height
+		orthographicCamera.bottom = -height
+		orthographicCamera.updateProjectionMatrix()
+		
 
 		renderer.setSize(width, height)
 	}
