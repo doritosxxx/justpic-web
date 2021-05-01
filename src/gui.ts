@@ -84,6 +84,10 @@ function renderGUI(
 		folder.add({isFlat:false}, "isFlat").name("Flat view").onChange(isFlat=>{
 			state.camera.type = isFlat ? "orthographic" : "perspective"; 
 		})
+		// TODO: сделать отдельный метод для изменения размера точки без генерации фрактала. 
+		folder.add(state.fractal, "pointSize").name("Point size").min(1).max(20).step(1).onChange(()=>{
+			tryRerender()
+		})
 		folder.open()
 	}
 

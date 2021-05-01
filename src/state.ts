@@ -5,6 +5,9 @@ const state: IAppState = {
 		type: "perspective",
 		positionZ: 750,
 	},
+	fractal: {
+		pointSize: 10,
+	},
 }
 
 export default state ;
